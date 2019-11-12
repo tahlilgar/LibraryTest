@@ -919,7 +919,7 @@ public class CommonClass {
         alert.show();*/
     }
 
-    public boolean validate(final String password,String pattern){
+    public boolean validatePasswordType(final String password,String pattern){
         String PASSWORD_PATTERN="";
         if(pattern.equals(""))
         {
