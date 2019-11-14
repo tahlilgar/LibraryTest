@@ -588,6 +588,9 @@ public class CommonClass {
             case 17:
                 msg = "تنظیمات یافت نشد، لطفا پس از دریافت، مجددا امتحان کنید.";
                 break;
+            case 18:
+                msg = "کد وارد شده صحیح نیست.";
+                break;
 
 
 
@@ -669,6 +672,7 @@ public class CommonClass {
             case 610:
                 msg = "شما قبلا ثبت نام نکرده اید. لطفا از کلید ثبت نام استفاده کنید";
                 break;
+
 
 
         }
