@@ -644,6 +644,15 @@ public class CommonClass {
             case 200:
                 msg = "عملیات با موفقیت انجام شد!";
                 break;
+            case 500:
+                msg = "خطا در انجام عملیات سرور";
+                break;
+            case 400:
+                msg = "سرور یافت نشد";
+                break;
+            case 404:
+                msg = "مشکل در ارسال در خواست به سرور";
+                break;
             case 600:
                 msg = "کلید ارتباطی وارد نشده است!";
                 break;
