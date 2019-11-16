@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.GpsStatus;
@@ -744,8 +745,7 @@ public class CommonClass {
         switch (typeToShare) {
             case Image:
             case Video:
-            case Voice:
-            case Apk: {
+            case Voice:{
                 Uri uriToImage = null;
                 // String path=FilesPath+TxtShareBody;
                 File file = new File(TxtShareBody);
@@ -794,6 +794,26 @@ public class CommonClass {
                 Intent texintent = new Intent(Intent.ACTION_VIEW);
                 texintent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+toNumber +"&text="+mensajillo));
                 ActivityChat.context.startActivity(texintent);*/
+    }
+
+    public Intent ShareApp(String Subject,Context context)
+    {
+        try
+        {
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo ai = pm.getApplicationInfo(context.getPackageName(), 0);
+            File srcFile = new File(ai.publicSourceDir);
+            Intent share = new Intent();
+            share.setAction("android.intent.action.SEND");
+            share.setType("application/vnd.android.package-archive");
+            share.putExtra("android.intent.extra.STREAM", Uri.fromFile(srcFile));
+            return Intent.createChooser(share, Subject);
+        }
+        catch (Exception e)
+        {
+            Analytics.trackEvent("Common_ShareApp " +  "_" + CommonClass.GetCurrentMDate() + "_"+DeviceProperty  + "_" + e.toString());
+        }
+        return null;
     }
 
     public void ActiveGPSMessage(final Context context)
