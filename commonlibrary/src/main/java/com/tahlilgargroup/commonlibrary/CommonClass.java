@@ -15,6 +15,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.GpsStatus;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -814,6 +816,17 @@ public class CommonClass {
             Analytics.trackEvent("Common_ShareApp " +  "_" + CommonClass.GetCurrentMDate() + "_"+DeviceProperty  + "_" + e.toString());
         }
         return null;
+    }
+
+    //Check if internet is present or not
+    private boolean isConnectingToInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager
+                    .getActiveNetworkInfo();
+        }
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public void ActiveGPSMessage(final Context context)
