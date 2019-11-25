@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.GpsStatus;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -34,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -66,6 +68,10 @@ import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+
+import ir.hamsaa.persiandatepicker.Listener;
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
+import ir.hamsaa.persiandatepicker.util.PersianCalendar;
 
 import static android.location.GpsStatus.GPS_EVENT_STARTED;
 import static android.location.GpsStatus.GPS_EVENT_STOPPED;
@@ -827,6 +833,53 @@ public class CommonClass {
                     .getActiveNetworkInfo();
         }
         return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private PersianDatePickerDialog picker;
+
+    //گرفتن تاریخ از تقویم و ثبت در تکست باکس
+    public void getDate(final View view,int ColorID) {
+        try {
+            picker = new PersianDatePickerDialog(view.getContext())
+                    .setPickerBackgroundColor(ColorID)
+                    .setPositiveButtonString("تایید")
+                    .setNegativeButton("انصراف")
+                    .setTodayButton("امروز")
+                    .setTodayButtonVisible(true)
+                    .setMinYear(1300)
+                    .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                    //.setInitDate(initDate)
+                    .setActionTextColor(Color.GRAY)
+                    //.setTypeFace(typeface)
+                    .setListener(new Listener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onDateSelected(PersianCalendar persianCalendar) {
+                            if (view instanceof EditText) {
+                                EditText textView = (EditText) view;
+
+                                textView.setText(PerisanNumber(persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay()) );
+                                //Do your stuff
+                            }
+                            // Toast.makeText(activity_filter.this, persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay(), Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        @Override
+                        public void onDismissed() {
+
+                        }
+                    });
+
+            picker.show();
+
+        }catch (Exception e)
+        {
+            Analytics.trackEvent("CommonClass" + "_" + "getDate" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+
+        }
+
+
     }
 
     public void ActiveGPSMessage(final Context context)

@@ -38,4 +38,6 @@ dependencies {
     //current location
     implementation 'com.google.android.gms:play-services-location:16.0.0'
 
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.1'
+
 }
