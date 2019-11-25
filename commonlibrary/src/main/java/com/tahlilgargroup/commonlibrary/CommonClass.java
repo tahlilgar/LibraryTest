@@ -825,7 +825,7 @@ public class CommonClass {
     }
 
     //Check if internet is present or not
-    private boolean isConnectingToInternet(Context context) {
+    public boolean isConnectingToInternet(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = null;
         if (connectivityManager != null) {
