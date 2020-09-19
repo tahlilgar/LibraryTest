@@ -12,8 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.GpsStatus;
 import android.location.LocationManager;
@@ -25,21 +23,22 @@ import android.os.Environment;
 import android.os.Process;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.telephony.TelephonyManager;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.telephony.TelephonyManager;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.microsoft.appcenter.analytics.Analytics;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,13 +47,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigInteger;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -66,7 +62,7 @@ import static android.location.GpsStatus.GPS_EVENT_STARTED;
 import static android.location.GpsStatus.GPS_EVENT_STOPPED;
 
 
-public class CommonClass {
+public class CommonClass1 {
     private static String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
     private static final int BUFFERSZ = 32768;
     private byte[] buffer = new byte[BUFFERSZ];
@@ -74,7 +70,7 @@ public class CommonClass {
     int copylength;
     boolean restoredone;
 
-    public static String DB_NAME = "DistributionDB";
+    public static String DB_NAME = "TransportDB";
     public static String FilesPath = Environment.getExternalStorageDirectory().toString() + "/tahlilgar";
 
 
@@ -89,7 +85,7 @@ public class CommonClass {
     public static final Integer LOCATION_COARSE = 9;
     public static final Integer INTERNET_STATE = 10;
 
-    public static String DeviceProperty = "DefaultDevice";
+    public static String DeviceProperty="DefaultDevice";
 
     // public static String WebServiceUrl="http://signalrwebservice.tahlilgargroup.ir/";
     // public static String FilesURL="http://testwebserv.tahlilgargroup.ir/Files/";
@@ -111,27 +107,21 @@ public class CommonClass {
       public static boolean has_INTERNET_STATE_Permission = false;
 
       public static final String isLogin = "IsLogin";*/
-    public static final String App_Prefrence = "MyPrefers";
+    public static final String Transport_Prefrence = "MyPrefers";
 
 
     public static final String App_version = "MyAppVersion";
     public static String DeviceIMEI = "";
     public static String DeviceName = "";
 
-    /**
-     * show message
-     *
-     * @param context
-     * @param text
-     * @param timeType
-     */
+
     public void ShowToast(Context context, String text, int timeType) {
         try {
 
             if (context != null)
                 Toast.makeText(context, text, timeType == 0 ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Analytics.trackEvent("CommonClass_" + "ShowToast1 " + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+        }catch (Exception e) {
+            Analytics.trackEvent("CommonClass_" + "ShowToast1 " +  "_" + CommonClass1.GetCurrentMDate() + "_" + e.getMessage());
         }
     }
 
@@ -140,29 +130,24 @@ public class CommonClass {
             if (context != null)
                 switch (type) {
                     case permission_Denied:
-                        ShowToast(context, context.getString(R.string.takeAccess), 0);
+                        ShowToast(context, "لطفا ابتدا دسترسی های لازم را به برنامه اعطا کنید", 0);
                         break;
                     case Network_Problem:
-                        ShowToast(context, context.getString(R.string.NetworkProblem) + "\n " + message, 0);
+                        ShowToast(context, "مشکل در برقراری ارتباط با شبکه" + "\n " + message, 0);
                         break;
                     case Is_Disconnect:
-                        ShowToast(context, context.getString(R.string.Disconnected), 0);
+                        ShowToast(context, "اتصال برقرار نیست! \nبعد از برقراری اتصال تلاش کنید..", 0);
                         break;
                     case Is_InRest:
-                        ShowToast(context, context.getString(R.string.FinshStop), 0);
+                        ShowToast(context, "لطفا قبل از انجام عملیات پایان توقف بزنید!", 0);
                         break;
                 }
-        } catch (Exception e) {
-            Analytics.trackEvent("CommonClass_" + "ShowToast2 " + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+        }catch (Exception e) {
+            Analytics.trackEvent("CommonClass_" + "ShowToast2 " +  "_" + CommonClass1.GetCurrentMDate() + "_" + e.getMessage());
         }
     }
 
-    /**
-     * change numbers to persian font
-     *
-     * @param text
-     * @return
-     */
+    //change numbers to persian font
     public String PerisanNumber(String text) {
         if (text.length() == 0) {
             return "";
@@ -182,69 +167,48 @@ public class CommonClass {
                     out += c;
                 }
             }
-        } catch (Exception e) {
-            Analytics.trackEvent("CommonClass_" + "PerisanNumber " + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+        }catch (Exception e) {
+            Analytics.trackEvent("CommonClass_" + "PerisanNumber " +  "_" + CommonClass1.GetCurrentMDate() + "_" + e.getMessage());
         }
         return out;
     }
 
-    /**
-     * set DeviceProperty variable
-     */
     public void setDeviceProperty() {
-        if (DeviceProperty.equals("DefaultDevice")) {
-            int currentapiVersion = 0;
+        if(DeviceProperty.equals("DefaultDevice"))
+        {
+            int currentapiVersion=0;
             try {
                 currentapiVersion = Build.VERSION.SDK_INT;
 
-            } catch (Exception e) {
-                Analytics.trackEvent("CommonClass_setDeviceProperty " + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+            }catch (Exception e)
+            {
+                Analytics.trackEvent("CommonClass_setDeviceProperty " +  "_" + CommonClass1.GetCurrentMDate() + "_" + e.getMessage());
 
             }
-            DeviceProperty = getDeviceName() + "_" + currentapiVersion;
+            DeviceProperty=getDeviceName()+"_"+currentapiVersion;
         }
 
 
     }
 
+    //convert voice to text
+    public void voiceTotxt(Context context) {
 
-    public static final String Language_Pref = "Lan";
-    public static final String LanguageType = "LanguageType";
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
-    /**
-     * set application language
-     *
-     * @param myContext
-     * @return
-     */
-    public String GetLanguage(Context myContext) {
-        String Lng = "us";
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fa");
+
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Learnfiles.com");
+
         try {
-            SharedPreferences shPref = myContext.getSharedPreferences(Language_Pref, Context.MODE_PRIVATE);
-            if (shPref.contains(LanguageType)) {
-                Lng = shPref.getString(LanguageType, "us");
-
-            } else {
-                //shPref = getSharedPreferences(DistributionClass.Language_Pref, Context.MODE_PRIVATE);
-                SharedPreferences.Editor sEdit = shPref.edit();
-                sEdit.putString(LanguageType, "us");
-                sEdit.apply();
-
-                Lng = "us";
-            }
-        } catch (Exception ex) {
-            Analytics.trackEvent("DistributionClass" + "_" + "GetLanguage" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + ex.getMessage());
+            ((Activity) context).startActivityForResult(intent, 100);
+        } catch (ActivityNotFoundException e) {
+            ShowToast(context, "دستگاه شما این امکان را پشتیبانی نمی کند!", Toast.LENGTH_SHORT);
         }
-
-        return Lng;
     }
 
-    /**
-     * get backup from db
-     *
-     * @param context
-     * @param DBName
-     */
     public void GetBackup(Context context, String DBName) {
         // Local database
         InputStream input = null;
@@ -285,52 +249,6 @@ public class CommonClass {
         }
     }
 
-    /**
-     * convert voice to text
-     */
-    public void voiceTotxt(Context context) {
-
-        //MainActivity.ComObj.voiceTotxt(myContext);
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-
-        final String Lng = GetLanguage(context);
-
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Lng);
-
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Learnfiles.com");
-
-        try {
-            ((Activity) context).startActivityForResult(intent, 100);
-        } catch (ActivityNotFoundException e) {
-            ShowToast(context, context.getString(R.string.DontSupportYourDevice), Toast.LENGTH_SHORT);
-        }
-
-
-
-       /* Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "fa");
-
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Learnfiles.com");
-
-        try {
-            ((Activity) context).startActivityForResult(intent, 100);
-        } catch (ActivityNotFoundException e) {
-            ShowToast(context, context.getString(R.string.DontSupportYourDevice), Toast.LENGTH_SHORT);
-        }*/
-    }
-
-    /**
-     * restore db backup
-     *
-     * @param context
-     * @param DBName
-     */
     public void restore(Context context, String DBName) {
 
         File dbfile = new File((context.getDatabasePath(DBName).toString()));
@@ -385,7 +303,6 @@ public class CommonClass {
             }
         }
     }
-
 
     public String Shamsi_Date() {
 
@@ -491,11 +408,6 @@ public class CommonClass {
 
     }
 
-    /**
-     * close open keyboard (has error in some apis)
-     *
-     * @param context
-     */
     public void closeKeyboard(Activity context) {
         View v = context.getCurrentFocus();
         if (v != null) {
@@ -506,9 +418,6 @@ public class CommonClass {
         }
     }
 
-    /**
-     * Check If SD Card is present or not method
-     */
     public static class CheckForSDCard {
         //Check If SD Card is present or not method
         public boolean isSDCardPresent() {
@@ -521,46 +430,27 @@ public class CommonClass {
         }
     }
 
-    /**
-     * calculate date and time difference
-     *
-     * @param dateStart
-     * @param dateStop
-     * @return
-     */
     public float CalculateTimeDiffrence(String dateStart, String dateStop) {
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat myFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         long diff = 123456789;
-        boolean IsNewDay = false;
 
         try {
             Date date1 = myFormat.parse(dateStart);
             Date date2 = myFormat.parse(dateStop);
             diff = date2.getTime() - date1.getTime();
             System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-
-            if (date2.compareTo(date1) > 0)
-                IsNewDay = true;
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         float days = (diff / (1000 * 60 * 60 * 24));
-        return IsNewDay ? 1 : days;
+        return days;
 
 
     }
 
-    /**
-     * get device api version
-     *
-     * @param context
-     * @return
-     */
     public PackageInfo GetAppVersion(Context context) {
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -571,7 +461,6 @@ public class CommonClass {
             return null;
         }
     }
-
 
     @SuppressLint("HardwareIds")
     public String getDeviceIMEI(Context context) {
@@ -611,32 +500,24 @@ public class CommonClass {
         }
     }
 
-    /**
-     * if installed app isn't new version , go to login activity to download new version and continue
-     *
-     * @param context
-     * @param isFromSplash
-     * @param LoginIsActive
-     * @param ActivityLogin
-     */
-    public void CheckAppVersion(Context context, boolean isFromSplash, boolean LoginIsActive, Class<?> ActivityLogin) {
+    public void CheckAppVersion(Context context, boolean isFromSplash,boolean LoginIsActive,Class<?> ActivityLogin) {
         int InstallAppVersion;
         //گرفتن ورژن برنامه جاری
         PackageInfo packageInfo = GetAppVersion(context);
         long CurrentAppVersion = packageInfo.versionCode;
 
         //واکشی ورژن ذخیره شده در دیتابیس(ورژنی از برنامه که در گوشی نصب شده)
-        SharedPreferences shPref = context.getSharedPreferences(CommonClass.App_Prefrence, Context.MODE_PRIVATE);
-        if (shPref.contains(CommonClass.App_version)) {
-            InstallAppVersion = shPref.getInt(CommonClass.App_version, 1);
+        SharedPreferences shPref = context.getSharedPreferences(CommonClass1.Transport_Prefrence, Context.MODE_PRIVATE);
+        if (shPref.contains(CommonClass1.App_version)) {
+            InstallAppVersion = shPref.getInt(CommonClass1.App_version, 1);
 
 
             //اگر ورژن جدید هست ورژن فعلی ذخیره شود و دیتابیس نوسازی شود
             if (InstallAppVersion != CurrentAppVersion) {
                 SharedPreferences.Editor sEdit = shPref.edit();
-                sEdit.putInt(CommonClass.App_version, (int) CurrentAppVersion);
+                sEdit.putInt(CommonClass1.App_version, (int) CurrentAppVersion);
                 sEdit.apply();
-                context.deleteDatabase(CommonClass.DB_NAME);
+                context.deleteDatabase(CommonClass1.DB_NAME);
                 if (!LoginIsActive && !isFromSplash) {
                     context.startActivity(new Intent(context, ActivityLogin));
                     ((Activity) context).finishAffinity();
@@ -645,7 +526,7 @@ public class CommonClass {
             }
         } else {
             SharedPreferences.Editor sEdit = shPref.edit();
-            sEdit.putInt(CommonClass.App_version, (int) CurrentAppVersion);
+            sEdit.putInt(CommonClass1.App_version, (int) CurrentAppVersion);
             sEdit.apply();
 
             if (!LoginIsActive && !isFromSplash) {
@@ -667,25 +548,13 @@ public class CommonClass {
         }
     }
 
-    /**
-     * open url (for about us)
-     *
-     * @param context
-     * @param url
-     */
     public void OpenURL(Context context, String url) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         context.startActivity(i);
     }
 
-    /**
-     * check entered email format validate
-     *
-     * @param email
-     * @return
-     */
-    public boolean isValidEmailId(String email) {
+    public boolean isValidEmailId(String email){
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
                 + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
@@ -694,213 +563,150 @@ public class CommonClass {
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
-    /**
-     * get error message by code
-     *
-     * @param Code
-     * @param context
-     * @return
-     */
-    public String ErrorMessages(int Code, Context context) {
+    public String ErrorMessages(int Code) {
         String msg = "";
         switch (Code) {
 
             case 10:
-                msg = context.getString(R.string.NoInformationFound);
+                msg = "اطلاعات یافت نشد!";
                 break;
             case 11:
-                msg = context.getString(R.string.ErrorPerformingOperation);
+                msg = "خطا در انجام عملیات! \n";
                 break;
             case 12:
-                msg = context.getString(R.string.GeoNotFinde);
+                msg = "نقطه جغرافیایی مبدا یافت نشد!";
                 break;
             case 13:
-                msg = context.getString(R.string.DestinationGeolocationNotFound);
+                msg = "نقطه جغرافیایی مقصد یافت نشد!";
                 break;
             case 14:
-                msg = context.getString(R.string.NoGeographicPointOfOriginOrDestinationFound);
+                msg = "نقطه جغرافیایی مبدا یا مقصد یافت نشد!";
                 break;
             case 15:
-                msg = context.getString(R.string.NoGeoPointFound);
+                msg = "نقطه جغرافیایی یافت نشد!";
                 break;
             case 16:
-                msg = context.getString(R.string.reachedYourDestination);
+                msg = "شما به مقصد رسیده اید! قبل از هر عملیاتی وضعیت سفر را مشخص کنید.";
                 break;
             case 17:
-                msg = context.getString(R.string.NoSettingsFound);
+                msg = "تنظیمات یافت نشد، لطفا پس از دریافت، مجددا امتحان کنید.";
                 break;
             case 18:
-                msg = context.getString(R.string.TheCodeEnteredIsIncorrect);
+                msg = "کد وارد شده صحیح نیست.";
                 break;
-            case 19:
-                msg = context.getString(R.string.InsertStarFields);
-                break;
-            case 20:
-                msg = context.getString(R.string.PleaseRefresh);
-                break;
-            case 21:
-                msg = context.getString(R.string.InvalidInput);
-                break;
-            case 22:
-                msg = context.getString(R.string.InvalidAuthorization);
-                break;
-            case 24:
-                msg = context.getString(R.string.CheckPermission);
-                break;
-            case 25:
-                msg = context.getString(R.string.HaveNotPermission);
-                break;
+
 
 
             case 21200101:
-                msg = context.getString(R.string.AddressEditingConfirmed);
+                msg = "ویرایش ترتیب آدرس ها تایید شد!";
                 break;
             case 21200102:
-                msg = context.getString(R.string.EditOrderOfAddressesRejected);
+                msg = "ویرایش ترتیب آدرس ها رد شد!";
                 break;
             case 21200100:
-                msg = context.getString(R.string.UpdateAddressOrder);
+                msg = "بروزرسانی ترتیب آدرس ها!";
                 break;
             case 11200101:
-                msg = context.getString(R.string.UpdateCitiesList);
+                msg = "بروزرسانی لیست شهرها!";
                 break;
             case 11200201:
-                msg = context.getString(R.string.UpdatingTheListOfProvinces);
+                msg = "بروزرسانی لیست استان ها!";
                 break;
-            case 1120010:
-                msg = context.getString(R.string.UpdateCustomerAddress);
+            case 11200102:
+                msg = "بروزرسانی آدرس مشتری!";
                 break;
             case 11200103:
-                msg = context.getString(R.string.PleaseTryAgain);
+                msg = "لطفا برای ورود مجدد تلاش کنید!";
                 break;
             case 11200104:
-                msg = context.getString(R.string.UpdateCauseListStop);
+                msg = "بروزرسانی لیست علت توقف!";
                 break;
             case 11200204:
-                msg = context.getString(R.string.FailureToUpdateList);
+                msg = "بروزرسانی لیست علت عدم تحویل!";
                 break;
             case 11200304:
-                msg = context.getString(R.string.UpdatingTheListOfPollTitles);
+                msg = "بروزرسانی لیست عناوین نظرسنجی!";
                 break;
             case 11200301:
-                msg = context.getString(R.string.SystemSettingsUpdate);
+                msg = "بروزرسانی تنظیمات سیستم!";
                 break;
             case 11200401:
-                msg = context.getString(R.string.UpdateApp);
-                break;
-            case 11200105:
-                msg = context.getString(R.string.UpdateCauseListStop);
-                break;
-            case 11200205:
-                msg = context.getString(R.string.FailureToUpdateList);
-                break;
-            case 11200305:
-                msg = context.getString(R.string.UpdatingTheListOfPollTitles);
-                break;
-            case 21200203:
-            case 21200205:
-                msg = context.getString(R.string.UpdateDistributionList);
-                break;
-            case 11200405:
-                msg = context.getString(R.string.UpdateCostList);
+                msg = "بروزرسانی اپلیکیشن!";
                 break;
 
 
             case 200:
-                msg = context.getString(R.string.DoneSuccessfully);
+                msg = "عملیات با موفقیت انجام شد!";
                 break;
             case 500:
-                msg = context.getString(R.string.ServerOprationFailed);
+                msg = "خطا در انجام عملیات سرور";
                 break;
             case 400:
-                msg = context.getString(R.string.ServerNotFound);
+                msg = "سرور یافت نشد";
                 break;
             case 404:
-                msg = context.getString(R.string.ProblemSendingRequestToServer);
+                msg = "مشکل در ارسال در خواست به سرور";
                 break;
             case 600:
-                msg = context.getString(R.string.CommunicationKeyNotEntered);
+                msg = "کلید ارتباطی وارد نشده است!";
                 break;
 
             case 601:
-                msg = context.getString(R.string.CommunicationKeyIsNotCorrect);
+                msg = "کلید ارتباطی صحیح نیست!";
                 break;
 
             case 602:
-                msg = context.getString(R.string.UserNotFoundWithThisProfile);
+                msg = "کاربر با این مشخصات یافت نشد!";
                 break;
 
             case 603:
-                msg = context.getString(R.string.ThePasswordDoesNotMatchTheIteration);
+                msg = "رمز عبور با تکرار آن مطابقت ندارد";
                 break;
 
             case 604:
-                msg = context.getString(R.string.TheNewWordOrPasswordIsEqualToItsCurrentValues);
+                msg = "کلمه و یا رمز عبور جدید با مقادیر فعلی آن برابر است";
                 break;
             case 605:
-                msg = context.getString(R.string.EnterTheCorrectUsernameOrPasswordCorrectly);
+                msg = "نام کاربری و یا رمز عبور قبلی را به درستی وارد کنید";
                 break;
             case 606:
-                msg = context.getString(R.string.InputParameterValuesAreIncorrect);
+                msg = "مقادیر پارامترهای ورودی صحیح نیست";
                 break;
             case 607:
-                msg = context.getString(R.string.ErrorRegisteringInformation);
+                msg = "خطا در ثبت اطلاعات!";
                 break;
             case 608:
-                msg = context.getString(R.string.ThePasswordMustMatchThePatternMentioned);
+                msg = "رمز باید مطابق الگوی ذکر شده باشد!";
                 break;
             case 609:
-                msg = context.getString(R.string.YouAreAlreadyRegistered);
+                msg = "شما قبلا ثبت نام شده اید.\n لطفا در صورت فراموشی، برای بازیابی حسابتان از بازیابی رمز استفاده نمایید";
                 break;
             case 610:
-                msg = context.getString(R.string.YouHaveNotAlreadyRegistered);
+                msg = "شما قبلا ثبت نام نکرده اید. لطفا از کلید ثبت نام استفاده کنید";
                 break;
             case 611:
-                msg = context.getString(R.string.ThisNameIsAlreadyRegistered);
+                msg = "این نام قبلا ثبت شده است \nاگر مالک آن هستید از بازیابی رمز و در غیر اینصورت با نام جدید ثبت نام نمایید.";
                 break;
-            case 612:
-                msg = context.getString(R.string.nvalidDate);
-                break;
-            case 613: //todo add parameter to set public this message
-                msg = context.getString(R.string.IsOkDontAllowOperation);
-                break;
-            case 614:
-                msg = context.getString(R.string.IncorrectCustomerPass);
-                break;
-            case 615:
-                msg = context.getString(R.string.GetFileFailed);
-                break;
-            case 616:
-                msg = context.getString(R.string.KalaNotFound);
-                break;
+
 
 
         }
         return msg;
     }
 
-    /**
-     * share from my app to others
-     *
-     * @param context
-     * @param TxtShareBody
-     * @param typeToShare
-     */
     public void Share(Context context, String TxtShareBody, TypeToShare typeToShare) {
-        try {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        String Type = "";
+        switch (typeToShare) {
+            case text: {
+                Type = "text/plain";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, TxtShareBody);
 
-            String Type = "";
-            switch (typeToShare) {
-                case text: {
-                    Type = "text/plain";
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, TxtShareBody);
-
-                    break;
-                }
-                case Image: {
-                    Type = "image/*";
+                break;
+            }
+            case Image: {
+                Type = "image/*";
               /*  Uri uriToImage = null;
                 // String path=FilesPath+TxtShareBody;
                 File file = new File(TxtShareBody);
@@ -912,48 +718,45 @@ public class CommonClass {
                     ShowToast(context, "لطفا ابتدا فایل را دریافت سپس امتحان کنید", Toast.LENGTH_LONG);
                 }*/
 
-                    break;
-                }
-                case Video: {
-                    Type = "video/*";
-
-                    break;
-                }
-                case Voice: {
-                    Type = "audio/*";
-                    break;
-                }
-                case Apk: {
-                    Type = "application/vnd.android.package-archive";
-                    break;
-                }
-
+                break;
             }
-            switch (typeToShare) {
-                case Image:
-                case Video:
-                case Voice: {
-                    Uri uriToImage = null;
-                    // String path=FilesPath+TxtShareBody;
-                    File file = new File(TxtShareBody);
-                    if (file.exists()) {
-                        uriToImage = Uri.fromFile(file);
-                        if (uriToImage != null)
-                            shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
-                    } else {
-                        ShowToast(context, context.getString(R.string.PleaseDownloadTheFileFirst), Toast.LENGTH_LONG);
-                    }
+            case Video: {
+                Type = "video/*";
+
+                break;
+            }
+            case Voice: {
+                Type = "audio/*";
+                break;
+            }
+            case Apk: {
+                Type = "application/vnd.android.package-archive";
+                break;
+            }
+
+        }
+        switch (typeToShare) {
+            case Image:
+            case Video:
+            case Voice:{
+                Uri uriToImage = null;
+                // String path=FilesPath+TxtShareBody;
+                File file = new File(TxtShareBody);
+                if (file.exists()) {
+                    uriToImage = Uri.fromFile(file);
+                    if (uriToImage != null)
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+                } else {
+                    ShowToast(context, "لطفا ابتدا فایل را دانلود کرده، سپس امتحان کنید", Toast.LENGTH_LONG);
                 }
             }
-            if (!Type.equals("")) {
+        }
+        if (!Type.equals("")) {
 
-                shareIntent.setType(Type);
-                // shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-                if (shareIntent.getExtras() != null)
-                    context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.ShareWith)));
-            }
-        } catch (Exception e) {
-            ShowToast(context, e.getMessage(), Toast.LENGTH_LONG);
+            shareIntent.setType(Type);
+            // shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+            if (shareIntent.getExtras() != null)
+                context.startActivity(Intent.createChooser(shareIntent, "اشتراک گذاری با "));
         }
 
 
@@ -986,15 +789,10 @@ public class CommonClass {
                 ActivityChat.context.startActivity(texintent);*/
     }
 
-    /**
-     * share my app
-     *
-     * @param Subject
-     * @param context
-     * @return
-     */
-    public Intent ShareApp(String Subject, Context context) {
-        try {
+    public Intent ShareApp(String Subject,Context context)
+    {
+        try
+        {
             PackageManager pm = context.getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(context.getPackageName(), 0);
             File srcFile = new File(ai.publicSourceDir);
@@ -1003,48 +801,35 @@ public class CommonClass {
             share.setType("application/vnd.android.package-archive");
             share.putExtra("android.intent.extra.STREAM", Uri.fromFile(srcFile));
             return Intent.createChooser(share, Subject);
-        } catch (Exception e) {
-            Analytics.trackEvent("Common_ShareApp " + "_" + CommonClass.GetCurrentMDate() + "_" + DeviceProperty + "_" + e.toString());
+        }
+        catch (Exception e)
+        {
+            Analytics.trackEvent("Common_ShareApp " +  "_" + CommonClass1.GetCurrentMDate() + "_"+DeviceProperty  + "_" + e.toString());
         }
         return null;
     }
 
-    /**
-     * Check if internet is present or not
-     */
+    //Check if internet is present or not
     public boolean isConnectingToInternet(Context context) {
-
-        try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = null;
-            if (connectivityManager != null) {
-                networkInfo = connectivityManager
-                        .getActiveNetworkInfo();
-            }
-            return networkInfo != null && networkInfo.isConnected();
-
-        } catch (Exception e) {
-            return true;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager
+                    .getActiveNetworkInfo();
         }
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     private PersianDatePickerDialog picker;
 
-
-    /**
-     * گرفتن تاریخ از تقویم و ثبت در تکست باکس
-     *
-     * @param view
-     * @param ColorID
-     * @param context
-     */
-    public void getDate(final View view, int ColorID, Context context) {
+    //گرفتن تاریخ از تقویم و ثبت در تکست باکس
+    public void getDate(final View view,int ColorID) {
         try {
             picker = new PersianDatePickerDialog(view.getContext())
                     .setPickerBackgroundColor(ColorID)
-                    .setPositiveButtonString(context.getString(R.string.Ok))
-                    .setNegativeButton(context.getString(R.string.Cancel))
-                    .setTodayButton(context.getString(R.string.Today))
+                    .setPositiveButtonString("تایید")
+                    .setNegativeButton("انصراف")
+                    .setTodayButton("امروز")
                     .setTodayButtonVisible(true)
                     .setMinYear(1300)
                     .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
@@ -1058,7 +843,7 @@ public class CommonClass {
                             if (view instanceof EditText) {
                                 EditText textView = (EditText) view;
 
-                                textView.setText(DateFormat(persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay()));
+                                textView.setText(PerisanNumber(persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay()) );
                                 //Do your stuff
                             }
                             // Toast.makeText(activity_filter.this, persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay(), Toast.LENGTH_SHORT).show();
@@ -1073,20 +858,17 @@ public class CommonClass {
 
             picker.show();
 
-        } catch (Exception e) {
-            Analytics.trackEvent("CommonClass" + "_" + "getDate" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+        }catch (Exception e)
+        {
+            Analytics.trackEvent("CommonClass1" + "_" + "getDate" + "_" + DeviceProperty + "_" + CommonClass1.GetCurrentMDate() + "_" + e.getMessage());
 
         }
 
 
     }
 
-    /**
-     * show gps request message
-     *
-     * @param context
-     */
-    public void ActiveGPSMessage(final Context context) {
+    public void ActiveGPSMessage(final Context context)
+    {
         try {
 
             SettingsClient mSettingsClient = LocationServices.getSettingsClient(context);
@@ -1104,7 +886,7 @@ public class CommonClass {
             // ایجاد پیام دیالوگ
             LocationSettingsRequest finalMLocationSettingsRequest = mLocationSettingsRequest;
             alertDialogBuilder
-                    .setMessage(context.getString(R.string.PleaseTryAgainAfterTurningOnYourDeviceGPS))
+                    .setMessage("لطفا پس از روشن کردن مکان نمای دستگاه مجددا تلاش کنید!")
                     .setCancelable(true)
                     .setPositiveButton("روشن کردن", new DialogInterface.OnClickListener() {
                         @Override
@@ -1124,8 +906,8 @@ public class CommonClass {
                                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
 
 
-                                        ComObj.askForPermission(context, Manifest.permission.ACCESS_FINE_LOCATION, CommonClass.LOCATION_FINE);
-                                        ComObj.askForPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION, CommonClass.LOCATION_COARSE);
+                                        ComObj.askForPermission(context, Manifest.permission.ACCESS_FINE_LOCATION, CommonClass1.LOCATION_FINE);
+                                        ComObj.askForPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION, CommonClass1.LOCATION_COARSE);
 
 
 
@@ -1144,7 +926,7 @@ public class CommonClass {
                                                     ResolvableApiException rae = (ResolvableApiException) e;
                                                     rae.startResolutionForResult((Activity) context, 100);
                                                 } catch (IntentSender.SendIntentException sie) {
-                                                    Analytics.trackEvent("MainAC_startLocationUpdates " + driverID + "_" + CommonClass.GetCurrentMDate() + "_"+DeviceProperty + "_" + e.getMessage());
+                                                    Analytics.trackEvent("MainAC_startLocationUpdates " + driverID + "_" + CommonClass1.GetCurrentMDate() + "_"+DeviceProperty + "_" + e.getMessage());
 
                                                 }
                                                 break;
@@ -1167,12 +949,12 @@ public class CommonClass {
             // نمایش دیالوگ
             alertDialog.show();
         } catch (Exception e) {
-            Analytics.trackEvent("Common_ActiveGPSMessage " + "_" + CommonClass.GetCurrentMDate() + "_" + DeviceProperty + "_" + e.toString());
+            Analytics.trackEvent("Common_ActiveGPSMessage " +  "_" + CommonClass1.GetCurrentMDate() + "_"+DeviceProperty  + "_" + e.toString());
         }
     }
 
-
-    public void DetectGPSTurn(Context context) {
+    public void DetectGPSTurn(Context context)
+    {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -1184,14 +966,16 @@ public class CommonClass {
             lm.addGpsStatusListener(new GpsStatus.Listener() {
                 public void onGpsStatusChanged(int event) {
                     switch (event) {
-                        case GPS_EVENT_STARTED: {
+                        case GPS_EVENT_STARTED:
+                        {
                             //alertDialog.cancel();
-                            //  MainActivity.GpsIsActive=true;
+                          //  MainActivity.GpsIsActive=true;
                             break;
 
                         }
-                        case GPS_EVENT_STOPPED: {
-                            //  MainActivity.GpsIsActive=false;
+                        case GPS_EVENT_STOPPED:
+                        {
+                          //  MainActivity.GpsIsActive=false;
                             // alertDialog.show();
                             break;
                         }
@@ -1201,26 +985,24 @@ public class CommonClass {
         }
     }
 
-    /**
-     * check gps is turn on or not
-     *
-     * @param context
-     */
-    public boolean GpsIsActive(Context context) {
-        boolean result = false;
+    public boolean GpsIsActive(Context context)
+    {
+        boolean result=false;
         try {
 
-            final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            final LocationManager manager = (LocationManager) context.getSystemService( Context.LOCATION_SERVICE );
 
             if (manager != null) {
-                result = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                result=  manager.isProviderEnabled( LocationManager.GPS_PROVIDER );
             }
-        } catch (Exception e) {
-            Analytics.trackEvent("Common_GpsIsActive " + "_" + CommonClass.GetCurrentMDate() + "_" + DeviceProperty + "_" + e.toString());
+        }
+        catch (Exception e)
+        {
+            Analytics.trackEvent("Common_GpsIsActive " +  "_" + CommonClass1.GetCurrentMDate() + "_"+DeviceProperty  + "_" + e.toString());
 
         }
-        return result;
-        // buildAlertMessageNoGps();
+        return  result;
+           // buildAlertMessageNoGps();
     }
 
 
@@ -1242,16 +1024,10 @@ public class CommonClass {
         alert.show();*/
     }
 
-    /**
-     * password format is validate
-     *
-     * @param password
-     * @param pattern
-     * @return
-     */
-    public boolean validatePasswordType(final String password, String pattern) {
-        String PASSWORD_PATTERN = "";
-        if (pattern.equals("")) {
+    public boolean validatePasswordType(final String password,String pattern){
+        String PASSWORD_PATTERN="";
+        if(pattern.equals(""))
+        {
             /**
              *  (?=.*\d)      #  must contains one digit from 0-9
              *   (?=.*[a-z])   #   must contains one lowercase characters
@@ -1261,8 +1037,9 @@ public class CommonClass {
              *   {6,20}        #   length at least 6 characters and maximum of 20
              */
             PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,12})";
-        } else {
-            PASSWORD_PATTERN = pattern;
+        }else
+        {
+            PASSWORD_PATTERN=pattern;
         }
 
         return PASSWORD_PATTERN.matches(password);
@@ -1270,113 +1047,74 @@ public class CommonClass {
 
     static ProgressDialog pd;
 
-    public void CancelWaitingDialog() {
-
-        try {
-            if (pd != null && pd.isShowing())
-                pd.cancel();
-        } catch (final Exception e) {
-            // Handle or log or ignore
-        } finally {
-            pd = null;
-        }
+    public  void CancelWaitingDialog() {
+        if (pd != null && pd.isShowing())
+            pd.cancel();
     }
 
-    public void ShowWaitingDialog(Context context, String Message) {
+    public  void ShowWaitingDialog(Context context,String Message) {
         if (context != null) {
-            try {
-                pd = new ProgressDialog(context);
-                if (Message.equals(""))
-                    Message = context.getString(R.string.PleaseWaitUntilTheEndOfTheOperation);
-                pd.setMessage(Message);
-                pd.setCancelable(false);
-                pd.show();
 
-            } catch (Exception e) {
-                Analytics.trackEvent("CustomerClass" + "_" + "ShowWaitingDialog" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+            pd = new ProgressDialog(context);
+            if(Message.equals(""))
+                Message="لطفا تا پایان عملیات منتظر بمانید...";
+            pd.setMessage(Message);
+            pd.setCancelable(false);
+            pd.show();
+        }
+    }
+
+/*
+    public void onRequestPermissionsResult(Context context, int requestCode, String[] permissions, int[] grantResults) {
+        if (ActivityCompat.checkSelfPermission(context, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
+            switch (requestCode) {
+                case 1: {
+                    CommonClass1.has_FINE_LOCATION_Permission = true;
+                    break;
+                }
+                case 2: {
+                    CommonClass1.has_CALL_Permission = true;
+                    break;
+                }
+                case 3: {
+                    CommonClass1.has_WRITE_EXST_Permission = true;
+                    break;
+                }
+                case 4: {
+                    CommonClass1.has_READ_EXST_Permission = true;
+                    break;
+                }
+                case 5: {
+                    CommonClass1.has_CAMERA_Permission = true;
+                    break;
+                }
+                case 6: {
+                    CommonClass1.has_INTERNET_Permission = true;
+                    break;
+                }
+                case 7: {
+                    CommonClass1.has_GPS_SETTINGS_Permission = true;
+                    break;
+                }
+                case 8: {
+                    CommonClass1.has_AUDIO_Permission = true;
+                    break;
+                }
+                case 9:{
+                    CommonClass1.has_COARSE_LOCATION_Permission = true;
+                    break;
+                }case 10: {
+                    CommonClass1.has_INTERNET_STATE_Permission = true;
+                    break;
+                }
+
             }
+        } else {
+            MainActivity.ComObj.ShowToast(context, "مجوز دسترسی داده نشده است!", Toast.LENGTH_SHORT);
+
         }
     }
-
-    /**
-     * برداشتن صفر اضافی و 3رقمی جدا کردن قیمت ها
-     **/
-    public void PriceView(String Price, TextView txtPrice, boolean showPersian) {
-        try {
-            String m = Price.contains(".") ?
-                    Price.substring(0, Price.indexOf('.')) :
-                    Price;
-            String mab = NumberFormat.getNumberInstance(Locale.US).format(BigInteger.valueOf(Long.valueOf(m)));
-            txtPrice.setText(showPersian ? PerisanNumber(mab) : mab);
-        } catch (Exception e) {
-            Analytics.trackEvent("CustomerClass" + "_" + "PriceView" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
-        }
-    }
-
-    /**
-     * remove dot from double number
-     *
-     * @param Price
-     * @return
-     */
-    public String DelDotFromDouble(String Price) {
-        String m = "";
-        try {
-            m = Price.contains(".") ?
-                    Price.substring(0, Price.indexOf('.')) :
-                    Price;
-
-        } catch (Exception e) {
-            Analytics.trackEvent("CustomerClass" + "_" + "DelDotFromDouble" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
-        }
-        return m;
-    }
-
-    /**
-     * set application language
-     *
-     * @param context
-     */
-    public void setLanguage(Context context) {
-        String Lng = GetLanguage(context);
-
-        Locale localeNew = new Locale(Lng);
-
-        Locale.setDefault(localeNew);
-
-        Resources res = context.getResources();
-
-        Configuration newConfig = new Configuration(res.getConfiguration());
-        newConfig.locale = localeNew;
-        newConfig.setLayoutDirection(localeNew);
-        res.updateConfiguration(newConfig, res.getDisplayMetrics());
-
-        newConfig.setLocale(localeNew);
-        context.createConfigurationContext(newConfig);
-    }
-
-    /**
-     * set date format yyyy/M/d to yyyy/MM/dd
-     *
-     * @param date_
-     * @return
-     */
-    public String DateFormat(String date_) {
-        String date = "";
-        try {
-
-            String[] dateArray = date_.split("/");
-            String year = dateArray[0];
-            String M = dateArray[1].length() == 2 ? dateArray[1] : "0" + dateArray[1];
-            String d = dateArray[2].length() == 2 ? dateArray[2] : "0" + dateArray[2];
-
-            date = year + "/" + M + "/" + d;
-        } catch (Exception e) {
-            Analytics.trackEvent("ActivityNewAppointment" + "_" + "DateFormat" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
-        }
-
-        return date;
-    }
+*/
 
 
 }
