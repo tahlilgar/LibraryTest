@@ -20,5 +20,8 @@
 # hide the original source file name.
 
 #-renamesourcefileattribute SourceFile
--keep class com.tahlilgargroup.commonlibrary {public *;}
 
+-keep class com.tahlilgargroup.commonlibrary.** { *; }
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose

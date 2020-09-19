@@ -19,12 +19,12 @@ android {
         release {
 
             useProguard true
-
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
-            minifyEnabled false
+            minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
