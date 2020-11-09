@@ -873,6 +873,33 @@ public class CommonClass {
             case 616:
                 msg = context.getString(R.string.KalaNotFound);
                 break;
+            case 617:
+                msg = context.getString(R.string.YouAreStop);
+                break;
+            case 618:
+                msg = context.getString(R.string.YouAreNotStop);
+                break;
+            case 619:
+                msg = context.getString(R.string.Score_Must_be_less_than_5);
+                break;
+            case 620:
+                msg = context.getString(R.string.Payment_Err);
+                break;
+            case 621:
+                msg = context.getString(R.string.Not_Found);
+                break;
+            case 622: //todo add parameter to set public this message
+                msg = context.getString(R.string.Mojoodi_Is_0);
+                break;
+            case 623:
+                msg = context.getString(R.string.Mande_Hesab_Problem);
+                break;
+            case 624:
+                msg = context.getString(R.string.Entesab_Limmit_err);
+                break;
+            case 625:
+                msg = context.getString(R.string.Setting_NotFound);
+                break;
 
 
         }

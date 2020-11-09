@@ -65,6 +65,16 @@
     <string name="InputParameterValuesAreIncorrect">Input parameter values are incorrect</string>
     <string name="ErrorRegisteringInformation">Error registering information!</string>
     <string name="ThePasswordMustMatchThePatternMentioned">The password must match the pattern mentioned!</string>
+    <string name="YouAreStop">You are stopped. Please end the stop first</string>
+    <string name="YouAreNotStop">You do not stop</string>
+    <string name="Score_Must_be_less_than_5">Score must be less than 5</string>
+    <string name="Payment_Err">Error in payment</string>
+    <string name="Not_Found">Not found from server</string>
+    <string name="Mojoodi_Is_0">Inventory is zero</string>
+    <string name="Mande_Hesab_Problem">Account problem</string>
+    <string name="Entesab_Limmit_err">Problems with access</string>
+    <string name="Setting_NotFound">Setting not found</string>
+
     <string name="YouAreAlreadyRegistered">You are already registered. If you forget, please use password recovery to recover your account</string>
     <string name="YouHaveNotAlreadyRegistered">You have not already registered. Please use the registration key</string>
     <string name="ThisNameIsAlreadyRegistered">This name is already registered.If you own it by password recovery or otherwise register with a new name.</string>
