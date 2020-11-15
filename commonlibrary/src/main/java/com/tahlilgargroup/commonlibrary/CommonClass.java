@@ -53,6 +53,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigInteger;
+import java.sql.Ref;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1521,6 +1522,8 @@ public class CommonClass {
             }
 
         } catch (Exception e) {
+            new CommonClass().ShowToast(context,e.getMessage(),Toast.LENGTH_LONG);
+
             Analytics.trackEvent("CommonClass" + "_" + "OpenExitApp" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
             return 3;
         }
