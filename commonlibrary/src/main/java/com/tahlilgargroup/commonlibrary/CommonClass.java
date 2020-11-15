@@ -1469,7 +1469,7 @@ public class CommonClass {
         AllowOpenCloseAppVM result = new AllowOpenCloseAppVM();
         result.setErMsg("");
         result.setRes((byte) 0);
-        
+
         try {
 
             if (new CommonClass().CheckForPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -1520,7 +1520,7 @@ public class CommonClass {
                             inputStream.close();
                             ret = stringBuilder.toString().replace(" ","").trim();
 
-                            String a= ret.substring(0, ret.length() - 1).trim();
+                           // String a= ret.substring(0, ret.length() - 1).trim();
                             if (ret.length() == 0 || ret.endsWith("0"))
                             {
                                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(/*context.openFileOutput*/new FileOutputStream(Path/*CommonClass.FilesPath + "/" + "config.txt", Context.MODE_PRIVATE*/));
