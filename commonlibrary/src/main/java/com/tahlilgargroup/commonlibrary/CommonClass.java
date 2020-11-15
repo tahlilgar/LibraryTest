@@ -61,6 +61,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -1436,12 +1437,39 @@ public class CommonClass {
         return false;
     }
 
-    public static byte AllowOpenCloseApp(Context context, String Path, boolean IsCloseRequest) {
-        byte result = 0;
+    public class AllowOpenCloseAppVM{
+        public String ErMsg;
+        public byte Res;
+
+        public AllowOpenCloseAppVM() {
+        }
+
+        public String getErMsg() {
+            return ErMsg;
+        }
+
+        public void setErMsg(String erMsg) {
+            ErMsg = erMsg;
+        }
+
+        public byte getRes() {
+            return Res;
+        }
+
+        public void setRes(byte res) {
+            Res = res;
+        }
+    }
+    public  AllowOpenCloseAppVM AllowOpenCloseApp(Context context, String Path, boolean IsCloseRequest) {
+        //byte result = 0;
         //0 not allow
         //1 allow
         //2 permission error
         //3 exception
+        AllowOpenCloseAppVM result = new AllowOpenCloseAppVM();
+        result.setErMsg("");
+        result.setRes((byte) 0);
+        
         try {
 
             if (new CommonClass().CheckForPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -1465,10 +1493,12 @@ public class CommonClass {
                             outputStreamWriter.close();
 
                         }
+                        result.setRes((byte) 1);
+                        return result;
+                       // return 1;
 
-                        return 1;
-
-                    } else {
+                    }
+                    else {
 
 
 
@@ -1496,36 +1526,48 @@ public class CommonClass {
                                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(/*context.openFileOutput*/new FileOutputStream(Path/*CommonClass.FilesPath + "/" + "config.txt", Context.MODE_PRIVATE*/));
                                 outputStreamWriter.write("1");
                                 outputStreamWriter.close();
-                                return 1;
+                                result.setRes((byte) 1);
+                                return result;
+                               // return 1;
                             }else {
-                                return 0;
+                                result.setRes((byte) 0);
+                                return result;
+                                //return 0;
                             }
 
                         }
                     }
 
 
-                    return 0;
+                    return result;
 
                 } else {
                     new CommonClass().ShowToast(context, CommonClass.ToastMessages.permission_Denied, "");
 
                     new CommonClass().askForPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, CommonClass.READ_EXST);
-                    return 2;
+                   // return 2;
+                    result.setRes((byte) 2);
+                    return result;
                 }
 
             } else {
                 new CommonClass().ShowToast(context, CommonClass.ToastMessages.permission_Denied, "");
 
                 new CommonClass().askForPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, CommonClass.WRITE_EXST);
-                return 2;
+                //return 2;
+                result.setRes((byte) 2);
+                return result;
             }
 
         } catch (Exception e) {
             new CommonClass().ShowToast(context,e.getMessage(),Toast.LENGTH_LONG);
 
             Analytics.trackEvent("CommonClass" + "_" + "OpenExitApp" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
-            return 3;
+            //return 3;
+            result.setRes((byte)3);
+            result.setErMsg(e.getMessage());
+
+            return result;
         }
 
     }
