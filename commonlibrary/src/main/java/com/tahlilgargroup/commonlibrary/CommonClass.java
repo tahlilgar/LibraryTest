@@ -3,6 +3,7 @@ package com.tahlilgargroup.commonlibrary;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -41,20 +42,25 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.microsoft.appcenter.analytics.Analytics;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -1399,11 +1405,126 @@ public class CommonClass {
 
             date = year + "/" + M + "/" + d;
         } catch (Exception e) {
-            Analytics.trackEvent("ActivityNewAppointment" + "_" + "DateFormat" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+            Analytics.trackEvent("CommonClass" + "_" + "DateFormat" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
         }
 
         return date;
     }
 
+    public boolean getOpenApplication(Context context,String PackageName){
+        try {
+            final ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+            final List<ActivityManager.RunningTaskInfo> recentTasks = Objects.requireNonNull(activityManager).getRunningTasks(Integer.MAX_VALUE);
+            for (int i = 0; i < recentTasks.size(); i++) {
+                String appId= "";
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    if (recentTasks.get(i).baseActivity != null) {
+                        appId = recentTasks.get(i).baseActivity.toShortString().substring(1,recentTasks.get(i).baseActivity.toShortString().indexOf("/"));
+                    }
+                }
+                if (appId.equals(PackageName.trim())){
+                    return true;
+                }
+            }
+        }catch (Exception e)
+        {
+            Analytics.trackEvent("CommonClass" + "_" + "getOpenApplication" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+
+        }
+
+        return false;
+    }
+
+    public static byte AllowOpenCloseApp(Context context, String Path, boolean IsCloseRequest) {
+        byte result = 0;
+        //0 not allow
+        //1 allow
+        //2 permission error
+        //3 exception
+        try {
+
+            if (new CommonClass().CheckForPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                if (new CommonClass().CheckForPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    File myDir = new File(CommonClass.FilesPath);
+                    myDir.mkdirs();
+
+                    File file = new File(Path/*CommonClass.FilesPath + "/" + "config.txt"*/);
+                    if(!file.exists())
+                    {
+                        file.createNewFile();
+                    }
+
+                    if (IsCloseRequest) {
+
+                        if(file.exists())
+                        {
+                            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(/*context.openFileOutput*/new FileOutputStream(Path/*CommonClass.FilesPath + "/" + "config.txt", Context.MODE_PRIVATE*/));
+                            outputStreamWriter.write("0");
+                            outputStreamWriter.close();
+
+                        }
+
+                        return 1;
+
+                    } else {
+
+
+
+
+                        String ret = "";
+
+                        InputStream inputStream = new FileInputStream/*context.openFileInput*/(Path/*CommonClass.FilesPath + "/" + "config.txt"*/);
+
+                        if (inputStream != null) {
+                            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                            String receiveString = "";
+                            StringBuilder stringBuilder = new StringBuilder();
+
+                            while ((receiveString = bufferedReader.readLine()) != null) {
+                                stringBuilder/*.append("\n")*/.append(receiveString);
+                            }
+
+                            inputStream.close();
+                            ret = stringBuilder.toString().replace(" ","").trim();
+
+                            String a= ret.substring(0, ret.length() - 1).trim();
+                            if (ret.length() == 0 || ret.endsWith("0"))
+                            {
+                                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(/*context.openFileOutput*/new FileOutputStream(Path/*CommonClass.FilesPath + "/" + "config.txt", Context.MODE_PRIVATE*/));
+                                outputStreamWriter.write("1");
+                                outputStreamWriter.close();
+                                return 1;
+                            }else {
+                                return 0;
+                            }
+
+                        }
+                    }
+
+
+                    return 0;
+
+                } else {
+                    new CommonClass().ShowToast(context, CommonClass.ToastMessages.permission_Denied, "");
+
+                    new CommonClass().askForPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, CommonClass.READ_EXST);
+                    return 2;
+                }
+
+            } else {
+                new CommonClass().ShowToast(context, CommonClass.ToastMessages.permission_Denied, "");
+
+                new CommonClass().askForPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, CommonClass.WRITE_EXST);
+                return 2;
+            }
+
+        } catch (Exception e) {
+            Analytics.trackEvent("CommonClass" + "_" + "OpenExitApp" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
+            return 3;
+        }
+
+    }
 
 }
