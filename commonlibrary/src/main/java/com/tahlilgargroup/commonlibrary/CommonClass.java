@@ -499,6 +499,117 @@ public class CommonClass {
 
     }
 
+
+    public static String Shamsi_Date2() {
+
+        Calendar cal = Calendar.getInstance();
+        int Day = cal.get(Calendar.DAY_OF_MONTH) + 1;
+        int Month = cal.get(Calendar.MONTH) + 1;
+        int Year = cal.get(Calendar.YEAR);
+        int Day_Of_Year = cal.get(Calendar.DAY_OF_YEAR);
+
+        //---------------------------------------------
+
+        if (Day_Of_Year <= 80)
+            Year -= 622;
+        else
+            Year -= 621;
+
+        switch (Month) {
+            case 1:
+                if (Day < 21) {
+                    Month = 10;
+                    Day += 10;
+                } else {
+                    Month = 11;
+                    Day -= 20;
+                }
+                break;
+
+            case 2:
+                if (Day < 20) {
+                    Month = 11;
+                    Day += 11;
+                } else {
+                    Month = 12;
+                    Day -= 19;
+                }
+                break;
+
+            case 3:
+                if (Day < 21) {
+                    Month = 12;
+                    Day += 9;
+                } else {
+                    Month = 1;
+                    Day -= 20;
+                }
+                break;
+
+            case 4:
+                if (Day < 21) {
+                    Month = 1;
+                    Day += 11;
+                } else {
+                    Month = 2;
+                    Day -= 20;
+                }
+                break;
+
+            case 5:
+            case 6:
+                if (Day < 22) {
+                    Month -= 3;
+                    Day += 10;
+                } else {
+                    Month -= 2;
+                    Day -= 21;
+                }
+                break;
+
+            case 7:
+            case 8:
+            case 9:
+                if (Day < 23) {
+                    Month -= 3;
+                    Day += 9;
+                } else {
+                    Month -= 2;
+                    Day -= 22;
+                }
+                break;
+
+            case 10:
+                if (Day < 23) {
+                    Month = 7;
+                    Day += 8;
+                } else {
+                    Month = 8;
+                    Day -= 22;
+                }
+                break;
+
+            case 11:
+            case 12:
+                if (Day < 22) {
+                    Month -= 3;
+                    Day += 9;
+                } else {
+                    Month -= 2;
+                    Day -= 21;
+                }
+                break;
+        }
+        String day = "", month = "";
+        if (Day < 10) day = "0" + String.valueOf(Day);
+        else day = String.valueOf(Day);
+        if (Month < 10) month = "0" + String.valueOf(Month);
+        else month = String.valueOf(Month);
+        return String.valueOf(Year) + "/" + month + "/" + day;
+
+    }
+
+
     /**
      * close open keyboard (has error in some apis)
      *
@@ -1413,23 +1524,22 @@ public class CommonClass {
         return date;
     }
 
-    public boolean getOpenApplication(Context context,String PackageName){
+    public boolean getOpenApplication(Context context, String PackageName) {
         try {
-            final ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+            final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             final List<ActivityManager.RunningTaskInfo> recentTasks = Objects.requireNonNull(activityManager).getRunningTasks(Integer.MAX_VALUE);
             for (int i = 0; i < recentTasks.size(); i++) {
-                String appId= "";
+                String appId = "";
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                     if (recentTasks.get(i).baseActivity != null) {
-                        appId = recentTasks.get(i).baseActivity.toShortString().substring(1,recentTasks.get(i).baseActivity.toShortString().indexOf("/"));
+                        appId = recentTasks.get(i).baseActivity.toShortString().substring(1, recentTasks.get(i).baseActivity.toShortString().indexOf("/"));
                     }
                 }
-                if (appId.equals(PackageName.trim())){
+                if (appId.equals(PackageName.trim())) {
                     return true;
                 }
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             Analytics.trackEvent("CommonClass" + "_" + "getOpenApplication" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
 
         }
@@ -1437,7 +1547,7 @@ public class CommonClass {
         return false;
     }
 
-    public class AllowOpenCloseAppVM{
+    public class AllowOpenCloseAppVM {
         public String ErMsg;
         public byte Res;
 
@@ -1460,7 +1570,8 @@ public class CommonClass {
             Res = res;
         }
     }
-    public  AllowOpenCloseAppVM AllowOpenCloseApp(Context context, String Path, boolean IsCloseRequest) {
+
+    public AllowOpenCloseAppVM AllowOpenCloseApp(Context context, String Path, boolean IsCloseRequest, String PackageName) {
         //byte result = 0;
         //0 not allow
         //1 allow
@@ -1479,15 +1590,13 @@ public class CommonClass {
                     myDir.mkdirs();
 
                     File file = new File(Path/*CommonClass.FilesPath + "/" + "config.txt"*/);
-                    if(!file.exists())
-                    {
+                    if (!file.exists()) {
                         file.createNewFile();
                     }
 
                     if (IsCloseRequest) {
 
-                        if(file.exists())
-                        {
+                        if (file.exists()) {
                             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(/*context.openFileOutput*/new FileOutputStream(Path/*CommonClass.FilesPath + "/" + "config.txt", Context.MODE_PRIVATE*/));
                             outputStreamWriter.write("0");
                             outputStreamWriter.close();
@@ -1495,12 +1604,9 @@ public class CommonClass {
                         }
                         result.setRes((byte) 1);
                         return result;
-                       // return 1;
+                        // return 1;
 
-                    }
-                    else {
-
-
+                    } else {
 
 
                         String ret = "";
@@ -1518,18 +1624,17 @@ public class CommonClass {
                             }
 
                             inputStream.close();
-                            ret = stringBuilder.toString().replace(" ","").trim();
+                            ret = stringBuilder.toString().replace(" ", "").trim();
 
-                           // String a= ret.substring(0, ret.length() - 1).trim();
-                            if (ret.length() == 0 || ret.endsWith("0"))
-                            {
+                            // String a= ret.substring(0, ret.length() - 1).trim();
+                            if (ret.length() == 0 || ret.endsWith("0")) {
                                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(/*context.openFileOutput*/new FileOutputStream(Path/*CommonClass.FilesPath + "/" + "config.txt", Context.MODE_PRIVATE*/));
                                 outputStreamWriter.write("1");
                                 outputStreamWriter.close();
                                 result.setRes((byte) 1);
                                 return result;
-                               // return 1;
-                            }else {
+                                // return 1;
+                            } else {
                                 result.setRes((byte) 0);
                                 return result;
                                 //return 0;
@@ -1545,7 +1650,7 @@ public class CommonClass {
                     new CommonClass().ShowToast(context, CommonClass.ToastMessages.permission_Denied, "");
 
                     new CommonClass().askForPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, CommonClass.READ_EXST);
-                   // return 2;
+                    // return 2;
                     result.setRes((byte) 2);
                     return result;
                 }
@@ -1560,11 +1665,11 @@ public class CommonClass {
             }
 
         } catch (Exception e) {
-            new CommonClass().ShowToast(context,e.getMessage(),Toast.LENGTH_LONG);
+            new CommonClass().ShowToast(context, e.getMessage(), Toast.LENGTH_LONG);
 
             Analytics.trackEvent("CommonClass" + "_" + "OpenExitApp" + "_" + DeviceProperty + "_" + CommonClass.GetCurrentMDate() + "_" + e.getMessage());
             //return 3;
-            result.setRes((byte)3);
+            result.setRes((byte) 3);
             result.setErMsg(e.getMessage());
 
             return result;
