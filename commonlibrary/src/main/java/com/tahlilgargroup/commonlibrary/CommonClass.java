@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.GpsStatus;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -98,6 +99,9 @@ public class CommonClass {
     public static final Integer INTERNET_STATE = 10;
 
     public static String DeviceProperty = "DefaultDevice";
+
+    public static Location mCurrentLocation;
+
 
     // public static String WebServiceUrl="http://signalrwebservice.tahlilgargroup.ir/";
     // public static String FilesURL="http://testwebserv.tahlilgargroup.ir/Files/";
