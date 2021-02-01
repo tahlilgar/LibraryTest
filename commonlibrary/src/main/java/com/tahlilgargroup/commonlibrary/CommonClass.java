@@ -891,6 +891,7 @@ public class CommonClass {
                 msg = context.getString(R.string.UpdatingTheListOfProvinces);
                 break;
             case 1120010:
+            case 11200202:
                 msg = context.getString(R.string.UpdateCustomerAddress);
                 break;
             case 11200103:
