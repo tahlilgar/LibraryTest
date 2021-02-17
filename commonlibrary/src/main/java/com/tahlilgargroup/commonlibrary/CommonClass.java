@@ -1436,6 +1436,8 @@ public class CommonClass {
     public void ShowWaitingDialog(Context context, String Message) {
         if (context != null) {
             try {
+                CancelWaitingDialog();
+
                 pd = new ProgressDialog(context);
                 if (Message.equals(""))
                     Message = context.getString(R.string.PleaseWaitUntilTheEndOfTheOperation);
